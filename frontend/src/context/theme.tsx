@@ -2,8 +2,10 @@
 
 import * as React from 'react';
 
-type Theme =
+export type Theme =
   | 'light'
+  | 'dark'
+  | 'system'
   | 'blue'
   | 'green'
   | 'purple'
@@ -13,7 +15,7 @@ type Theme =
   | 'forest'
   | 'sunset';
 
-type BaseTheme = 'light';
+type BaseTheme = 'light' | 'dark';
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -56,7 +58,7 @@ const themeConfig: Record<
       '--primary-700': '#1d4ed8',
       '--primary-800': '#1e40af',
       '--primary-900': '#1e3a8a',
-      '--secondary-50': '#f0fdfa',
+      '--secondary-50': '#f0fdfaf',
       '--secondary-100': '#ccfbf1',
       '--secondary-200': '#99f6e4',
       '--secondary-300': '#5eead4',
@@ -66,6 +68,31 @@ const themeConfig: Record<
       '--secondary-700': '#115e59',
       '--secondary-800': '#134e4a',
       '--secondary-900': '#114e4e',
+    }
+  },
+  dark: {
+    base: 'dark',
+    cssVariables: {
+      '--primary-50': '#1e293b',
+      '--primary-100': '#334155',
+      '--primary-200': '#475569',
+      '--primary-300': '#64748b',
+      '--primary-400': '#94a3b8',
+      '--primary-500': '#3b82f6',
+      '--primary-600': '#2563eb',
+      '--primary-700': '#1d4ed8',
+      '--primary-800': '#1e40af',
+      '--primary-900': '#1e3a8a',
+      '--secondary-50': '#111827',
+      '--secondary-100': '#1f2937',
+      '--secondary-200': '#374151',
+      '--secondary-300': '#4b5563',
+      '--secondary-400': '#6b7280',
+      '--secondary-500': '#9ca3af',
+      '--secondary-600': '#d1d5db',
+      '--secondary-700': '#e5e7eb',
+      '--secondary-800': '#f3f4f6',
+      '--secondary-900': '#f9fafb',
     }
   },
   blue: {
@@ -267,6 +294,10 @@ const themeConfig: Record<
       '--secondary-800': '#9a3412',
       '--secondary-900': '#7c2d12',
     }
+  },
+  system: {
+    base: 'light',
+    cssVariables: {}
   }
 };
 
@@ -314,6 +345,7 @@ export function ThemeProvider({
     root.classList.remove(
       'light',
       'dark',
+      'system',
       'blue',
       'green',
       'purple',

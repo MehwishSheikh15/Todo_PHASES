@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/sidebar';
-import { useTheme } from '@/context/theme';
+import { useTheme, Theme } from '@/context/theme';
 import { useNotification } from '@/context/notification';
 import { Bell, Palette, User, Shield, Info, Sun, Moon, Monitor } from 'lucide-react';
 
@@ -53,11 +53,10 @@ const SettingsPage = () => {
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center px-6 py-4 text-sm font-medium border-b-2 -mb-px ${
-                          activeTab === tab.id
-                            ? 'border-primary text-primary-600 dark:text-primary-400'
-                            : 'border-transparent text-foreground/70 hover:text-foreground'
-                        }`}
+                        className={`flex items-center px-6 py-4 text-sm font-medium border-b-2 -mb-px ${activeTab === tab.id
+                          ? 'border-primary text-primary-600 dark:text-primary-400'
+                          : 'border-transparent text-foreground/70 hover:text-foreground'
+                          }`}
                       >
                         <IconComponent className="h-4 w-4 mr-2" />
                         {tab.name}
@@ -141,12 +140,11 @@ const SettingsPage = () => {
                           return (
                             <button
                               key={themeOption.id}
-                              onClick={() => setTheme(themeOption.id as any)}
-                              className={`p-4 rounded-lg border ${
-                                theme === themeOption.id
-                                  ? 'ring-2 ring-offset-2 ring-primary-500 border-primary-500'
-                                  : 'border-border hover:border-primary-400'
-                              }`}
+                              onClick={() => setTheme(themeOption.id as Theme)}
+                              className={`p-4 rounded-lg border ${theme === themeOption.id
+                                ? 'ring-2 ring-offset-2 ring-primary-500 border-primary-500'
+                                : 'border-border hover:border-primary-400'
+                                }`}
                             >
                               <div className="text-center">
                                 <IconComponent className="h-6 w-6 mx-auto mb-2 text-foreground" />

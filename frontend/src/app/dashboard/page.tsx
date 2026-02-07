@@ -93,6 +93,7 @@ const DashboardPage = () => {
       description: '',
       status: 'todo',
       priority: 'medium',
+      due_date: undefined,
     });
     setShowModal(true);
   };
@@ -406,11 +407,10 @@ const DashboardPage = () => {
                             <div className="flex items-start space-x-3">
                               <button
                                 onClick={() => handleToggleComplete(task)}
-                                className={`mt-0.5 flex-shrink-0 ${
-                                  task.status === 'done'
+                                className={`mt-0.5 flex-shrink-0 ${task.status === 'done'
                                     ? 'text-green-600 dark:text-green-400'
                                     : 'text-foreground/50 hover:text-foreground'
-                                }`}
+                                  }`}
                               >
                                 {task.status === 'done' ? (
                                   <div className="h-5 w-5 rounded-full bg-green-500 flex items-center justify-center">
@@ -431,32 +431,29 @@ const DashboardPage = () => {
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              task.status === 'done'
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${task.status === 'done'
                                 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                                 : task.status === 'in-progress'
                                   ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
                                   : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                            }`}>
+                              }`}>
                               {task.status === 'todo' ? 'Pending' : task.status === 'in-progress' ? 'In Progress' : 'Completed'}
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <Flag className={`h-4 w-4 mr-1 ${
-                                task.priority === 'high'
+                              <Flag className={`h-4 w-4 mr-1 ${task.priority === 'high'
                                   ? 'text-red-500'
                                   : task.priority === 'medium'
                                     ? 'text-yellow-500'
                                     : 'text-blue-500'
-                              }`} />
-                              <span className={`text-xs font-medium ${
-                                task.priority === 'high'
+                                }`} />
+                              <span className={`text-xs font-medium ${task.priority === 'high'
                                   ? 'text-red-700 dark:text-red-400'
                                   : task.priority === 'medium'
                                     ? 'text-yellow-700 dark:text-yellow-400'
                                     : 'text-blue-700 dark:text-blue-400'
-                              }`}>
+                                }`}>
                                 {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                               </span>
                             </div>
@@ -519,7 +516,7 @@ const DashboardPage = () => {
                     id="title"
                     type="text"
                     value={newTask.title}
-                    onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                    onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background text-foreground transition-all duration-200"
                     placeholder="Enter task title..."
                     required
@@ -533,7 +530,7 @@ const DashboardPage = () => {
                   <textarea
                     id="description"
                     value={newTask.description}
-                    onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+                    onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                     rows={3}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background text-foreground transition-all duration-200 resize-none"
                     placeholder="Enter task description..."
@@ -548,7 +545,7 @@ const DashboardPage = () => {
                     <select
                       id="status"
                       value={newTask.status}
-                      onChange={(e) => setNewTask({...newTask, status: e.target.value as TaskStatus})}
+                      onChange={(e) => setNewTask({ ...newTask, status: e.target.value as TaskStatus })}
                       className="w-full px-4 py-3 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-800 shadow-sm transition-all duration-200 hover:border-purple-300 appearance-none cursor-pointer"
                     >
                       <option value="todo">Pending</option>
@@ -564,7 +561,7 @@ const DashboardPage = () => {
                     <select
                       id="priority"
                       value={newTask.priority}
-                      onChange={(e) => setNewTask({...newTask, priority: e.target.value as TaskPriority})}
+                      onChange={(e) => setNewTask({ ...newTask, priority: e.target.value as TaskPriority })}
                       className="w-full px-4 py-3 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-800 shadow-sm transition-all duration-200 hover:border-purple-300 appearance-none cursor-pointer"
                     >
                       <option value="low">Low</option>
@@ -583,7 +580,7 @@ const DashboardPage = () => {
                     id="dueDate"
                     type="date"
                     value={newTask.due_date || ''}
-                    onChange={(e) => setNewTask({...newTask, due_date: e.target.value || undefined})}
+                    onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value || undefined })}
                     className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background text-foreground transition-all duration-200"
                   />
                 </div>

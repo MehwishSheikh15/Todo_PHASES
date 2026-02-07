@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTheme } from '@/context/theme';
+import { useTheme, Theme } from '@/context/theme';
 import { Palette, Sun, Moon, Droplets, Mountain, Zap, Waves, Leaf, Sunset } from 'lucide-react';
 
 const ThemeSelector = () => {
@@ -28,12 +28,11 @@ const ThemeSelector = () => {
           return (
             <button
               key={themeOption.id}
-              onClick={() => setTheme(themeOption.id as any)}
-              className={`p-2 rounded-lg border transition-all ${
-                theme === themeOption.id
-                  ? 'ring-2 ring-offset-2 ring-primary-500 border-primary-500'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-primary-400'
-              }`}
+              onClick={() => setTheme(themeOption.id as Theme)}
+              className={`p-2 rounded-lg border transition-all ${theme === themeOption.id
+                ? 'ring-2 ring-offset-2 ring-primary-500 border-primary-500'
+                : 'border-gray-300 dark:border-gray-600 hover:border-primary-400'
+                }`}
               title={themeOption.name}
             >
               <IconComponent className={`h-4 w-4 ${themeOption.color.replace('bg-', 'text-')}`} />
