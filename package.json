@@ -5,6 +5,7 @@
   "scripts": {
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "build": "cd frontend && npm install && npm run build",
     "backend": "cd backend && uvicorn main:app --port 8001 --host 127.0.0.1",
     "frontend": "cd frontend && npm run dev",
     "frontend-legacy": "cd frontend && npm run dev-legacy",
