@@ -1,0 +1,150 @@
+{
+  "agentic_dev_stack": {
+    "version": "1.0.0",
+    "phase": "II",
+    "agents": {
+      "architect": {
+        "enabled": true,
+        "skills": [
+          "spec-driven-builder",
+          "api-generator",
+          "database-schema",
+          "authentication-security",
+          "ui-theme-designer",
+          "ux-flow-designer"
+        ],
+        "invocation_pattern": "sequential",
+        "logging_hooks": [
+          "agent_decision_hook",
+          "validation_hook"
+        ]
+      },
+      "backend": {
+        "enabled": true,
+        "skills": [
+          "api-generator",
+          "database-schema",
+          "authentication-security"
+        ],
+        "invocation_pattern": "parallel",
+        "logging_hooks": [
+          "skill_execution_hook",
+          "error_handling_hook"
+        ]
+      },
+      "frontend": {
+        "enabled": true,
+        "skills": [
+          "ui-theme-designer",
+          "ux-flow-designer",
+          "api-generator"
+        ],
+        "invocation_pattern": "parallel",
+        "logging_hooks": [
+          "skill_execution_hook",
+          "validation_hook"
+        ]
+      },
+      "ai_automation": {
+        "enabled": false,
+        "phase_activation": "III",
+        "skills": [
+          "mcp-tool-builder",
+          "conversation-orchestration"
+        ],
+        "invocation_pattern": "asynchronous",
+        "logging_hooks": [
+          "conversation_hook",
+          "coordination_hook"
+        ]
+      }
+    },
+    "skills": {
+      "spec-driven-builder": {
+        "category": "architecture",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/spec-driven-builder.md",
+        "validation_rules": ["constitutional_compliance"]
+      },
+      "api-generator": {
+        "category": "backend",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/api-generator.md",
+        "validation_rules": ["security_by_default", "jwt_required"]
+      },
+      "database-schema": {
+        "category": "backend",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/database-schema.md",
+        "validation_rules": ["row_level_security", "neon_compatible"]
+      },
+      "authentication-security": {
+        "category": "security",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/authentication-security.md",
+        "validation_rules": ["jwt_validation", "user_isolation"]
+      },
+      "ui-theme-designer": {
+        "category": "frontend",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/ui-theme-designer.md",
+        "validation_rules": ["wcag_aa_compliant", "responsive_design"]
+      },
+      "ux-flow-designer": {
+        "category": "frontend",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/ux-flow-designer.md",
+        "validation_rules": ["accessible_flow", "cross_device"]
+      },
+      "mcp-tool-builder": {
+        "category": "integration",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/mcp-tool-builder.md",
+        "validation_rules": ["mcp_specification", "tool_schema_valid"]
+      },
+      "conversation-orchestration": {
+        "category": "ai",
+        "reusable_across_phases": true,
+        "template_path": "specs/skills/conversation-orchestration.md",
+        "validation_rules": ["context_preservation", "privacy_compliant"]
+      }
+    },
+    "logging": {
+      "level": "info",
+      "format": "json",
+      "storage": {
+        "type": "centralized",
+        "retention_days": 90,
+        "audit_retention_years": 2
+      },
+      "hooks": {
+        "agent_decision_hook": {
+          "enabled": true,
+          "fields": ["timestamp", "agent", "decision_type", "reasoning", "correlation_id"]
+        },
+        "skill_execution_hook": {
+          "enabled": true,
+          "fields": ["timestamp", "agent", "skill", "execution_duration", "result_status", "correlation_id"]
+        },
+        "error_handling_hook": {
+          "enabled": true,
+          "fields": ["timestamp", "agent", "error_type", "error_message", "recovery_strategy", "correlation_id"]
+        },
+        "validation_hook": {
+          "enabled": true,
+          "fields": ["timestamp", "agent", "validation_type", "validation_result", "violations_found", "correlation_id"]
+        },
+        "coordination_hook": {
+          "enabled": true,
+          "fields": ["timestamp", "initiating_agent", "receiving_agent", "message_type", "correlation_id"]
+        }
+      }
+    },
+    "governance": {
+      "constitutional_alignment": true,
+      "spec_before_code": true,
+      "security_by_default": true,
+      "observability_mandatory": true
+    }
+  }
+}

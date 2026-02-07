@@ -146,15 +146,49 @@ Examples of foundational tasks (adjust based on your project):
 
 ---
 
-## Phase N: Polish & Cross-Cutting Concerns
+## Phase N: Constitutional Compliance & Cross-Cutting Concerns
 
-**Purpose**: Improvements that affect multiple user stories
+**Purpose**: Ensure constitutional compliance and improvements that affect multiple user stories
 
+### Security Validation (Constitution Principle III)
+- [ ] TXXX [P] Verify JWT authentication on all API endpoints
+- [ ] TXXX [P] Validate row-level security (user_id filtering) in all queries
+- [ ] TXXX [P] Test 401/403 error responses for auth failures
+- [ ] TXXX [P] Verify no secrets in code (environment variables only)
+- [ ] TXXX [P] Test input validation and SQL injection prevention
+- [ ] TXXX Security audit and penetration testing
+
+### UI/UX Review (Constitution Principle IX)
+- [ ] TXXX [P] Verify responsive design (mobile, tablet, desktop)
+- [ ] TXXX [P] Test accessibility compliance (WCAG 2.1 AA)
+- [ ] TXXX [P] Validate keyboard navigation
+- [ ] TXXX [P] Test screen reader compatibility
+- [ ] TXXX [P] Verify loading states and error states
+- [ ] TXXX [P] Test empty states with onboarding guidance
+- [ ] TXXX [P] Validate dark mode (if applicable)
+
+### Observability Setup (Constitution Principle VIII)
+- [ ] TXXX [P] Implement structured logging with correlation IDs
+- [ ] TXXX [P] Add performance metrics (latency, throughput, error rates)
+- [ ] TXXX [P] Implement health check endpoint (/health)
+- [ ] TXXX [P] Implement readiness check endpoint (/ready)
+- [ ] TXXX [P] Add error taxonomy with actionable context
+- [ ] TXXX Configure monitoring and alerting
+
+### Cloud-Native Deployment (Constitution Principle VI)
+- [ ] TXXX [P] Create Dockerfile for FastAPI backend
+- [ ] TXXX [P] Configure Neon PostgreSQL connection pooling
+- [ ] TXXX [P] Setup database migrations (Alembic)
+- [ ] TXXX [P] Configure environment variables (dev/staging/production)
+- [ ] TXXX [P] Setup Vercel deployment for frontend
+- [ ] TXXX [P] Test graceful shutdown handling
+- [ ] TXXX Verify stateless service design (horizontal scalability)
+
+### General Polish
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories
 - [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
 
 ---

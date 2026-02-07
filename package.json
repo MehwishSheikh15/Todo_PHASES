@@ -1,0 +1,32 @@
+{
+  "name": "todo-fullstack-app",
+  "version": "1.0.0",
+  "description": "Full-stack todo application with Next.js frontend and FastAPI backend",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && uvicorn main:app --port 8001 --host 127.0.0.1",
+    "frontend": "cd frontend && npm run dev",
+    "frontend-legacy": "cd frontend && npm run dev-legacy",
+    "backend-dev": "cd backend && uvicorn main:app --reload --port 8001 --host 127.0.0.1",
+    "frontend-dev": "cd frontend && npm run dev",
+    "frontend-no-turbo": "cd frontend && npm run dev",
+    "backend-alt": "cd backend && uvicorn main:app --reload --port 8002 --host 127.0.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "keywords": [
+    "todo",
+    "fullstack",
+    "nextjs",
+    "fastapi",
+    "python",
+    "react"
+  ],
+  "author": "Todo App Team",
+  "license": "MIT",
+  "dependencies": {
+    "framer-motion": "^12.28.1"
+  }
+}
