@@ -50,7 +50,11 @@ async function forwardRequest(
 
     // Extract Authorization header to get user ID
     const authHeader = request.headers.get('authorization') || request.headers.get('Authorization');
-    let backendUrl = `http://localhost:8001`;
+    // Use environment variable for backend URL if available
+    let backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000`;
+
+    // Ensure backendUrl doesn't end with /api if we're adding it later
+    backendUrl = backendUrl.replace(/\/api$/, '');
 
     // Modify path for routes that require user ID
     if (subpath.startsWith('/frontend/')) {

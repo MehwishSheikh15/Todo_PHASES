@@ -1,15 +1,13 @@
 import ApiClient from '@/lib/api-client';
 import { Task } from '@/types/task';
 import axios from 'axios';
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000/api';
+import API_CONFIG from '@/lib/api-config';
 
 class TaskService {
   private apiClient: ApiClient;
 
   constructor() {
-    this.apiClient = new ApiClient(API_BASE_URL);
+    this.apiClient = new ApiClient(API_CONFIG.BASE_URL);
   }
 
   async getTasks(userId: string): Promise<Task[]> {

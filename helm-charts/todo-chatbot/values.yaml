@@ -1,0 +1,86 @@
+# Default values for todo-chatbot Helm chart
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Frontend configuration
+frontend:
+  # Docker image for frontend
+  # Replace with your actual frontend image
+  image:
+    repository: todo-chatbot-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  # Number of frontend replicas
+  replicaCount: 2
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  
+  # Environment variables
+  env:
+    # Backend API URL (configurable)
+    BACKEND_URL: "http://todo-chatbot-backend:80/api"
+
+# Backend configuration
+backend:
+  # Docker image for backend
+  # Replace with your actual backend image
+  image:
+    repository: todo-chatbot-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  # Number of backend replicas
+  replicaCount: 2
+  
+  # Service configuration
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8000
+  
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  
+  # Environment variables
+  env:
+    # Add any backend-specific environment variables here
+    LOG_LEVEL: "info"
+    ENVIRONMENT: "production"
+
+# Ingress configuration for local access
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    # Annotations for Minikube ingress
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  host: todo-chatbot.local
+  paths:
+    - path: /
+      pathType: Prefix
+      service: frontend
+
+# Global labels
+labels:
+  app: todo-chatbot
+  version: "1.0.0"

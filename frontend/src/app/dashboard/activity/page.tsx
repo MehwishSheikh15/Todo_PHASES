@@ -46,7 +46,7 @@ export default function ActivityPage() {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_CONFIG.BASE_URL}/activity`, {
+        const response = await fetch(API_CONFIG.ACTIVITY_ENDPOINT, {
           headers: {
             ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           }

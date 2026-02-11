@@ -1,0 +1,47 @@
+# Example: Custom values for production deployment
+# Copy this file and modify as needed
+# Usage: helm install todo-chatbot ./todo-chatbot -f custom-values.yaml
+
+frontend:
+  image:
+    repository: myregistry.azurecr.io/todo-chatbot-frontend
+    tag: v1.0.0
+    pullPolicy: Always
+  
+  replicaCount: 5
+  
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  
+  env:
+    BACKEND_URL: "http://todo-chatbot-backend:80/api"
+
+backend:
+  image:
+    repository: myregistry.azurecr.io/todo-chatbot-backend
+    tag: v1.0.0
+    pullPolicy: Always
+  
+  replicaCount: 3
+  
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+  
+  env:
+    LOG_LEVEL: "debug"
+    ENVIRONMENT: "production"
+
+ingress:
+  enabled: true
+  className: nginx
+  host: todo-chatbot.production.local

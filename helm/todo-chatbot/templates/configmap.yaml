@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-config
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+data:
+  BACKEND_SERVICE_URL: {{ .Values.config.backendUrl | quote }}
+  FRONTEND_PORT: {{ .Values.service.frontendPort | quote }}
+  DATABASE_URL: {{ .Values.config.databaseUrl | quote }}
+  PORT: {{ .Values.config.port | quote }}

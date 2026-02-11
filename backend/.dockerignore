@@ -1,0 +1,32 @@
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache
+.coverage
+
+# Virtual environments
+venv
+env
+ENV
+.venv
+
+# Development
+.git
+.gitignore
+.env*.local
+.vscode
+.idea
+
+# Logs
+*.log
+
+# Database
+*.db
+*.sqlite3
+
+# Misc
+.DS_Store

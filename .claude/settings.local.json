@@ -79,7 +79,9 @@
       "Bash(dir:*)",
       "Bash(python:*)",
       "Bash(curl:*)",
-      "Bash(timeout 5 ping:*)"
+      "Bash(timeout 5 ping:*)",
+      "Bash(git fetch:*)",
+      "Bash(.specify/scripts/bash/create-new-feature.sh:*)"
     ]
   }
 }

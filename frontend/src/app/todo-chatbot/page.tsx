@@ -249,7 +249,7 @@ export default function TodoChatbotPage() {
     const loadHistory = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`${API_CONFIG.BASE_URL}/chat/history`, {
+        const response = await fetch(`${API_CONFIG.CHAT_ENDPOINT}/history`, {
           headers: {
             ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           }

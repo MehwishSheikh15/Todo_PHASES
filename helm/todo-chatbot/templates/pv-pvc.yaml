@@ -1,0 +1,33 @@
+{{- if .Values.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-db-pv
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    type: local
+spec:
+  storageClassName: {{ .Values.persistence.storageClass | quote }}
+  capacity:
+    storage: {{ .Values.persistence.size }}
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  hostPath:
+    path: "/mnt/data/{{ include "todo-chatbot.fullname" . }}-db"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-db-pvc
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.persistence.storageClass | quote }}
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}
+{{- end }}
