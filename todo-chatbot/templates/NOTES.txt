@@ -1,29 +1,29 @@
-1. Get the application URL by running these commands:
-{{- if .Values.ingress.enabled }}
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
-{{- end }}
-{{- else if contains "NodePort" .Values.frontend.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services todo-frontend)
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.frontend.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w todo-frontend'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} todo-frontend --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.frontend.service.port }}
-{{- else if contains "ClusterIP" .Values.frontend.service.type }}
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward svc/todo-frontend 8080:{{ .Values.frontend.service.port }}
-{{- end }}
+Thank you for installing {{ .Chart.Name }}.
 
-2. To upgrade the release:
-   helm upgrade {{ .Release.Name }} . --set frontend.replicaCount=2 --set backend.replicaCount=3
+Your Todo Chatbot application has been deployed with:
 
-3. To check the status of your release:
-   helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+- Frontend: {{ .Values.frontend.replicaCount }} replica(s) on port {{ .Values.frontend.service.port }}
+- Backend: {{ .Values.backend.replicaCount }} replica(s) on port {{ .Values.backend.service.port }}
 
-4. To view the pods:
-   kubectl get pods -n {{ .Values.global.namespace | default .Release.Namespace }}
+To access your Todo Chatbot application:
+
+1. Get the frontend service external IP/URL:
+   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+   You can watch the status by running:
+   
+   kubectl get svc todo-frontend-service --namespace {{ .Release.Namespace }} -w
+
+2. Once the external IP is available, visit:
+   http://<EXTERNAL-IP>:{{ .Values.frontend.service.port }}
+
+3. The backend API is available internally at:
+   http://todo-backend-service:{{ .Values.backend.service.port }}
+
+To verify the deployment:
+  kubectl get pods --namespace {{ .Release.Namespace }}
+
+To upgrade the deployment:
+  helm upgrade {{ .Release.Name }} . --namespace {{ .Release.Namespace }}
+
+To uninstall the deployment:
+  helm delete {{ .Release.Name }} --namespace {{ .Release.Namespace }}

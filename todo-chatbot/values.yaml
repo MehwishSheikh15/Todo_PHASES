@@ -2,117 +2,64 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# Global settings
-global:
-  namespace: todo-app
-
-# Frontend configuration
 frontend:
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: todo-frontend
-    pullPolicy: Never  # Use local image in Minikube
-    tag: "latest"
-  
-  # Autoscaling configuration
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
-  
+    tag: latest
+    pullPolicy: IfNotPresent
   service:
-    type: NodePort
-    port: 80
-    targetPort: 3000
-    nodePort: 30080
-  
+    type: ClusterIP
+    port: 3000
   resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
-  
-  env:
-    # Backend service URL that the frontend will use
-    NEXT_PUBLIC_BACKEND_URL: "http://todo-backend:5000"
-    BACKEND_URL: "http://todo-backend:5000"
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
 
-# Backend configuration
 backend:
   replicaCount: 2
   image:
     repository: todo-backend
-    pullPolicy: Never  # Use local image in Minikube
-    tag: "latest"
-  
-  # Autoscaling configuration
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 3
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
-  
+    tag: latest
+    pullPolicy: IfNotPresent
   service:
     type: ClusterIP
-    port: 5000
-    targetPort: 5000
-  
+    port: 8000
   resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
     requests:
-      cpu: 250m
-      memory: 256Mi
-  
-  env:
-    # Backend port
-    PORT: "5000"
-    # Database URL
-    DATABASE_URL: "sqlite:///./todo_app.db"
-    # Algorithm for JWT
-    ALGORITHM: "HS256"
-    # Access token expiration
-    ACCESS_TOKEN_EXPIRE_MINUTES: "30"
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "400m"
 
-# Configuration for the application
-config:
-  # Backend service name within the cluster
-  backendServiceName: "todo-backend"
-  # Backend service port
-  backendServicePort: 5000
+frontendEnv:
+  REACT_APP_API_URL: "http://todo-backend-service:8000"
 
-# Secrets (loaded from .env file)
-secrets:
-  # Gemini API Key from .env
-  geminiApiKey: "AIzaSyD-bWBdB3E5LK03kJ5fqB-H-ipmMzt4P4w"
-  # Secret key for JWT
-  secretKey: "your-super-secret-key-here-for-testing-only"
-  # Database password (if needed)
-  dbPassword: ""
+backendEnv:
+  PORT: "8000"
+  LOG_LEVEL: "info"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_NAME: "todo_db"
 
-# Persistence configuration
-persistence:
-  enabled: false
-  storageClass: ""
-  accessMode: ReadWriteOnce
-  size: 1Gi
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
 
-# Ingress configuration (disabled for NodePort access)
-ingress:
-  enabled: false
-  className: "nginx"
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-  hosts:
-    - host: todo-chatbot.local
-      paths:
-        - path: /
-          pathType: Prefix
-          service: frontend
-  tls: []
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000

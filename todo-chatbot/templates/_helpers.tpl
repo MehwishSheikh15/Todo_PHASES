@@ -49,14 +49,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "todo-chatbot.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "todo-chatbot.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "todo-chatbot.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}

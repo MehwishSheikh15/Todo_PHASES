@@ -1,0 +1,13 @@
+node_modules
+.next
+.nyc_output
+coverage
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.next
+out
+dist
+build

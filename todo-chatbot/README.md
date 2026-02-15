@@ -1,94 +1,93 @@
 # Todo Chatbot Helm Chart
 
-This Helm chart deploys the Todo Chatbot application, which consists of a frontend UI and a backend API.
+This Helm chart deploys the Todo Chatbot application, which consists of a React frontend and a Python backend.
+
+## Chart Components
+
+The chart creates the following Kubernetes resources:
+
+- Frontend Deployment with 2 replicas
+- Backend Deployment with 2 replicas
+- Frontend Service to expose the React application
+- Backend Service to expose the API server
+- ConfigMap containing environment variables
 
 ## Prerequisites
 
 - Kubernetes 1.19+
-- Helm 3.0+
+- Helm 3+
 
-## Installation
+## Installing the Chart
 
-To install the chart with the release name `todo`:
+To install the chart with the release name `my-release`:
 
 ```bash
-helm install todo ./todo-chatbot
+helm install my-release .
 ```
 
 ## Configuration
 
-The following table lists the configurable parameters of the Todo Chatbot chart and their default values.
+The following table lists the configurable parameters of the todo-chatbot chart and their default values.
 
-### Global Parameters
+### Frontend Configuration
 
-| Parameter                 | Description                                     | Default                |
-| ------------------------- | ----------------------------------------------- | ---------------------- |
-| `global.namespace`        | Namespace to deploy resources                   | `todo-app`             |
+| Parameter                     | Description                               | Default Value |
+|-------------------------------|-------------------------------------------|---------------|
+| `frontend.replicaCount`       | Number of frontend replicas               | 2             |
+| `frontend.image.repository`   | Frontend image repository                 | todo-frontend |
+| `frontend.image.tag`          | Frontend image tag                        | latest        |
+| `frontend.image.pullPolicy`   | Frontend image pull policy                | IfNotPresent  |
+| `frontend.service.type`       | Frontend service type                     | ClusterIP     |
+| `frontend.service.port`       | Frontend service port                     | 3000          |
+| `frontend.resources.requests` | Frontend resource requests                | 128Mi memory, 100m CPU |
+| `frontend.resources.limits`   | Frontend resource limits                  | 256Mi memory, 200m CPU |
 
-### Frontend Parameters
+### Backend Configuration
 
-| Parameter                                 | Description                                         | Default                       |
-| ----------------------------------------- | --------------------------------------------------- | ----------------------------- |
-| `frontend.replicaCount`                   | Number of frontend pods to deploy                   | `1`                           |
-| `frontend.image.repository`               | Frontend image repository                           | `todo-frontend`               |
-| `frontend.image.pullPolicy`               | Frontend image pull policy                          | `IfNotPresent`                |
-| `frontend.image.tag`                      | Frontend image tag (defaults to chart appVersion)   | `""`                          |
-| `frontend.service.type`                   | Frontend service type                               | `NodePort`                    |
-| `frontend.service.port`                   | Frontend service port                               | `80`                          |
-| `frontend.service.nodePort`               | Frontend service node port                          | `30080`                       |
-| `frontend.resources.limits.cpu`           | CPU limit for frontend                              | `200m`                        |
-| `frontend.resources.limits.memory`        | Memory limit for frontend                           | `256Mi`                       |
-| `frontend.resources.requests.cpu`         | CPU request for frontend                            | `100m`                        |
-| `frontend.resources.requests.memory`      | Memory request for frontend                         | `128Mi`                       |
-| `frontend.env.NEXT_PUBLIC_BACKEND_URL`    | Backend service URL for frontend to connect to      | `"http://todo-backend:5000"`  |
+| Parameter                     | Description                               | Default Value |
+|-------------------------------|-------------------------------------------|---------------|
+| `backend.replicaCount`        | Number of backend replicas                | 2             |
+| `backend.image.repository`    | Backend image repository                  | todo-backend  |
+| `backend.image.tag`           | Backend image tag                         | latest        |
+| `backend.image.pullPolicy`    | Backend image pull policy                 | IfNotPresent  |
+| `backend.service.type`        | Backend service type                      | ClusterIP     |
+| `backend.service.port`        | Backend service port                      | 5000          |
+| `backend.resources.requests`  | Backend resource requests                 | 256Mi memory, 200m CPU |
+| `backend.resources.limits`    | Backend resource limits                   | 512Mi memory, 400m CPU |
 
-### Backend Parameters
+### ConfigMap Values
 
-| Parameter                             | Description                                       | Default                       |
-| ------------------------------------- | ------------------------------------------------- | ----------------------------- |
-| `backend.replicaCount`                | Number of backend pods to deploy                  | `2`                           |
-| `backend.image.repository`            | Backend image repository                          | `todo-backend`                |
-| `backend.image.pullPolicy`            | Backend image pull policy                         | `IfNotPresent`                |
-| `backend.image.tag`                   | Backend image tag (defaults to chart appVersion)  | `""`                          |
-| `backend.service.type`                | Backend service type                              | `ClusterIP`                   |
-| `backend.service.port`                | Backend service port                              | `5000`                        |
-| `backend.service.targetPort`          | Backend service target port                       | `8000`                        |
-| `backend.resources.limits.cpu`        | CPU limit for backend                             | `500m`                        |
-| `backend.resources.limits.memory`     | Memory limit for backend                          | `512Mi`                       |
-| `backend.resources.requests.cpu`      | CPU request for backend                           | `250m`                        |
-| `backend.resources.requests.memory`   | Memory request for backend                        | `256Mi`                       |
-| `backend.env.PORT`                    | Backend port                                      | `"8000"`                      |
-| `backend.env.DATABASE_URL`            | Database URL                                      | `"sqlite:///./todo_app.db"`   |
+| Parameter                     | Description                               | Default Value |
+|-------------------------------|-------------------------------------------|---------------|
+| `config.REACT_APP_API_URL`    | URL for the backend API                   | http://todo-backend-service:5000 |
+| `config.PORT`                 | Backend port                              | 5000          |
+| `config.LOG_LEVEL`            | Log level                                 | info          |
+| `config.DB_HOST`              | Database host                             | postgres      |
+| `config.DB_PORT`              | Database port                             | 5432          |
+| `config.DB_NAME`              | Database name                             | todo_db       |
 
-### Configuration Parameters
+## Customizing the Chart
 
-| Parameter                     | Description                                    | Default                       |
-| ----------------------------- | ---------------------------------------------- | ----------------------------- |
-| `config.backendServiceName`   | Backend service name within the cluster        | `"todo-backend"`              |
-| `config.backendServicePort`   | Backend service port                           | `5000`                        |
-
-### Secrets Parameters
-
-| Parameter             | Description                                | Default                       |
-| --------------------- | ------------------------------------------ | ----------------------------- |
-| `secrets.geminiApiKey`| Gemini API key                             | `"YOUR_GEMINI_API_KEY_HERE"`  |
-| `secrets.secretKey`   | Secret key for JWT tokens                  | `"YOUR_SECRET_KEY_HERE"`      |
-| `secrets.dbPassword`  | Database password                          | `"YOUR_DB_PASSWORD_HERE"`     |
-
-## Upgrading
-
-To upgrade the chart to a new version or change configuration:
+To customize the installation, create a `values.yaml` file with your desired configuration and install using:
 
 ```bash
-helm upgrade todo ./todo-chatbot --set frontend.replicaCount=2 --set backend.replicaCount=3
+helm install my-release -f values.yaml .
 ```
 
-## Uninstallation
+## Uninstalling the Chart
 
-To uninstall/delete the `todo` release:
+To uninstall/delete the `my-release` deployment:
 
 ```bash
-helm delete todo
+helm delete my-release
 ```
 
-This removes all the Kubernetes components associated with the chart and deletes the release.
+## Verifying the Installation
+
+After installation, you can verify the deployment with:
+
+```bash
+kubectl get pods
+kubectl get services
+helm status my-release
+```

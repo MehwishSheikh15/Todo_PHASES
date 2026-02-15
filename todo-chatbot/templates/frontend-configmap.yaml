@@ -1,11 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: todo-app-config
+  name: todo-frontend-config
 data:
 {{- range $key, $value := .Values.frontendEnv }}
-  {{ $key }}: {{ $value | quote }}
-{{- end }}
-{{- range $key, $value := .Values.backendEnv }}
   {{ $key }}: {{ $value | quote }}
 {{- end }}
