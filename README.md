@@ -1,6 +1,6 @@
 # Todo App with Gemini-Powered Chatbot
 
-This is a full-stack Todo application featuring an AI-powered chatbot that understands natural language commands using Google's Gemini API. The application supports both Node.js and Python/FastAPI backends with intelligent task management capabilities.
+This is a full-stack Todo application featuring an AI-powered chatbot that understands natural language commands using Google's Gemini API. The application supports both Node.js and Python/FastAPI backends with intelligent task management capabilities. The application is designed for cloud-native deployment with Docker and Kubernetes.
 
 ## Features
 
@@ -10,6 +10,9 @@ This is a full-stack Todo application featuring an AI-powered chatbot that under
 - **Multi-platform Support**: Works with both Node.js and Python/FastAPI backends
 - **Hugging Face Deployment Ready**: Optimized for Hugging Face Spaces
 - **Dual Backend Architecture**: Choice of Node.js or Python backend with consistent functionality
+- **Containerized Deployment**: Docker support for easy deployment
+- **Kubernetes Native**: Designed for deployment on Kubernetes clusters
+- **AI DevOps Tools Integration**: Includes tools like kubectl-ai for enhanced operations
 
 ## Project Structure
 
@@ -42,6 +45,10 @@ This is a full-stack Todo application featuring an AI-powered chatbot that under
 │   │   └── types/         # TypeScript types
 │   ├── package.json       # Node.js dependencies
 │   └── next.config.js     # Next.js configuration
+├── docker/                # Docker configuration files
+├── k8s/                   # Kubernetes manifests
+├── helm/                  # Helm charts for deployment
+├── specs/                 # Project specifications
 └── README.md
 ```
 
@@ -52,6 +59,9 @@ This is a full-stack Todo application featuring an AI-powered chatbot that under
 - Node.js (for Node.js backend)
 - Python 3.8+ (for Python backend)
 - Google Gemini API Key
+- Docker (for containerization)
+- Kubernetes cluster (for Kubernetes deployment)
+- Helm (for Helm-based deployments)
 
 ### Installation
 
@@ -99,6 +109,167 @@ SECRET_KEY=your_secret_key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 GEMINI_API_KEY=your_actual_gemini_api_key_here
+```
+
+## Docker Setup
+
+### Building Docker Images
+
+To build both frontend and backend Docker images with the specified tags, run:
+
+```bash
+# For Linux/Mac
+./build-and-run-docker.sh
+
+# For Windows
+build-and-run-docker.bat
+```
+
+Or build them individually:
+
+```bash
+# Build frontend image
+docker build -f todo-frontend.Dockerfile -t todo-frontend:latest .
+
+# Build backend image
+docker build -f todo-backend.Dockerfile -t todo-backend:latest .
+```
+
+### Running the Application with Docker
+
+After building the images, you can run the containers:
+
+```bash
+# Run backend container
+docker run -d --name todo-backend-container -p 8000:8000 todo-backend:latest
+
+# Run frontend container (with link to backend)
+docker run -d --name todo-frontend-container -p 3000:3000 --link todo-backend-container:backend todo-frontend:latest
+```
+
+### Alternative: Using Docker Compose
+
+For easier management, you can also use the provided docker-compose file:
+
+```bash
+docker-compose up --build
+```
+
+## Kubernetes Deployment
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/get-started)
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Helm](https://helm.sh/docs/intro/install/)
+
+### Quick Start
+
+#### 1. Start Minikube
+
+```bash
+# Start Minikube cluster
+./setup-minikube.bat
+```
+
+#### 2. Build Docker Images
+
+```bash
+# Build backend image
+cd backend
+docker build -t todo-backend:latest .
+cd ..
+
+# Build frontend image
+cd frontend
+docker build -t todo-frontend:latest .
+cd ..
+```
+
+#### 3. Deploy Using Helm
+
+```bash
+# Install the application using Helm
+./install-helm-chart.bat
+```
+
+#### 4. Access the Application
+
+```bash
+# Get the Minikube IP
+minikube ip
+
+# Add to your hosts file: <MINIKUBE_IP> todo.local
+# Then access the application at: http://todo.local
+```
+
+Alternatively, use port forwarding:
+
+```bash
+# Port forward to access the frontend
+kubectl port-forward svc/todo-chatbot-frontend-service 3000:3000 -n todo-chatbot
+```
+
+Then visit `http://localhost:3000`
+
+### Manual Deployment (Alternative to Helm)
+
+If you prefer to deploy manually without Helm:
+
+```bash
+# Apply all Kubernetes manifests
+./deploy-k8s.bat
+```
+
+### Configuration
+
+#### Environment Variables
+
+The application uses the following configuration:
+
+- `GEMINI_API_KEY`: Your Google Gemini API key (set in secrets)
+- `SECRET_KEY`: Secret key for JWT tokens (set in secrets)
+- `DATABASE_URL`: Database connection string (set in configmap)
+- `BACKEND_URL`: Backend service URL (set in configmap)
+
+To update these values, modify the `helm/todo-chatbot/values.yaml` file before installing the chart.
+
+### Scaling
+
+To scale the deployments:
+
+```bash
+# Scale backend
+kubectl scale deployment todo-chatbot-backend-deployment -n todo-chatbot --replicas=3
+
+# Scale frontend
+kubectl scale deployment todo-chatbot-frontend-deployment -n todo-chatbot --replicas=3
+```
+
+## AI DevOps Tools Integration
+
+This deployment includes integration with AI-powered DevOps tools:
+
+### Docker AI Gordon
+Optimizes Docker images using AI recommendations:
+```bash
+docker gordon analyze backend/Dockerfile
+docker gordon suggest frontend/Dockerfile
+```
+
+### kubectl-ai
+Enhances kubectl with AI-powered commands:
+```bash
+kubectl ai explain deployment
+kubectl ai troubleshoot pod/<pod-name>
+```
+
+### Kagent
+Automates Kubernetes operations:
+```bash
+kagent start --config=kagent.yaml
+kagent status
 ```
 
 ## Usage Examples
@@ -184,12 +355,39 @@ To deploy:
 - Store your GEMINI_API_KEY securely as an environment variable
 - Never commit API keys to version control
 - The application follows standard security practices for web applications
+- API keys are stored in Kubernetes Secrets when deployed to Kubernetes
+- Network policies can be added for additional security in Kubernetes
 
 ## Troubleshooting
 
-- If the chatbot doesn't respond as expected, check that your GEMINI_API_KEY is valid
-- Ensure both backends are properly configured with the same API key
-- Check the logs for any error messages
+### Common Issues
+
+1. **Images not found**: Ensure you've built the Docker images before deploying
+2. **Service not accessible**: Check if the ingress controller is enabled in Minikube:
+   ```bash
+   minikube addons enable ingress
+   ```
+3. **API key issues**: Verify your GEMINI_API_KEY is correctly set in the secrets
+
+### Useful Commands
+
+```bash
+# Check pod status
+kubectl get pods -n todo-chatbot
+
+# View logs
+kubectl logs -l app=todo-backend -n todo-chatbot
+kubectl logs -l app=todo-frontend -n todo-chatbot
+
+# Describe resources for debugging
+kubectl describe deployment todo-chatbot-backend-deployment -n todo-chatbot
+
+# Check services
+kubectl get svc -n todo-chatbot
+
+# Check ingress
+kubectl get ingress -n todo-chatbot
+```
 
 ## Contributing
 
